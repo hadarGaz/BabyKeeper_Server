@@ -1,25 +1,42 @@
 package com.babykeeper.babykeeper.Controller;
 
+import com.babykeeper.babykeeper.UsersManager;
 import com.babykeeper.babykeeper.model.ResponsObj;
 import com.babykeeper.babykeeper.model.User;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class SignupController {
+
+    @Autowired
+    UsersManager usersManager;
 
     User user;
 
     @RequestMapping("/signup")
-    public ResponsObj ResponsObj(@RequestBody String UserDetails) throws Exception {
+    public ResponsObj signUp(@RequestBody String UserDetails) throws Exception {
         JSONObject obj = new JSONObject(UserDetails);
+        user = new User(obj.getString("Email"),obj.getString("Password"));
         user.setFname(obj.getString("FirstName"));
         user.setLname(obj.getString("LastName"));
-        user.setEmail(obj.getString("Email"));
-        user.setPass(obj.getString("Password"));
 
-        //need to to save account in the DB and return to the client the user id
-        return new ResponsObj(true,"","1234");
-        //return new ResponsObj(false,"invalid email","");
+
+        if (usersManager.isUserExisst(user.getEmail())) {
+            return new ResponsObj(false, "Email already exists", "");
+        } else {
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").push();
+            user.setUserId(userRef.getKey());
+            userRef.setValue(user, (databaseError, databaseReference) -> System.out.println("done writing to firebase"));
+            Thread.sleep(5000);
+
+            usersManager.addUserToMap(user.getEmail(), user);
+            return new ResponsObj(true, "", userRef.getKey());
+        }
     }
 }

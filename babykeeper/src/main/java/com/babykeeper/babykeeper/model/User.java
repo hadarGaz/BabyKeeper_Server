@@ -1,30 +1,38 @@
 package com.babykeeper.babykeeper.model;
 
 public class User {
-    private String Fname;
-    private String Lname;
+    private String fname;
+    private String lname;
     private String email;
-    private String Pass;
+    private String pass;
+    private String userId;
 
     public User(String email, String pass) {
         this.email = email;
-        Pass = pass;
+        this.pass = pass;
+    }
+
+    public User(String fname, String lname, String pass, String email) {
+        this.fname = fname;
+        this.lname = lname;
+        this.email = email;
+        this.pass = pass;
     }
 
     public String getFname() {
-        return Fname;
+        return fname;
     }
 
     public void setFname(String fname) {
-        Fname = fname;
+        this.fname = fname;
     }
 
     public String getLname() {
-        return Lname;
+        return lname;
     }
 
     public void setLname(String lname) {
-        Lname = lname;
+        this.lname = lname;
     }
 
     public String getEmail() {
@@ -36,10 +44,18 @@ public class User {
     }
 
     public String getPass() {
-        return Pass;
+        return pass;
     }
 
     public void setPass(String pass) {
-        Pass = pass;
+        this.pass = pass;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
