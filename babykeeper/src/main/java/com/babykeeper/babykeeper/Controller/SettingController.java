@@ -1,34 +1,40 @@
 package com.babykeeper.babykeeper.Controller;
 
+import com.babykeeper.babykeeper.UsersManager;
 import com.babykeeper.babykeeper.model.ContactPerson;
 import com.babykeeper.babykeeper.model.ResponsObj;
 import com.babykeeper.babykeeper.model.SettingInfo;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.lang.reflect.Type;
 import java.util.*;
 
 @RestController
 public class SettingController {
     SettingInfo settingInfo;
 
+    @Autowired
+    UsersManager usersManager;
+
     @RequestMapping("/getUserSettingInfo")
     public SettingInfo getSettingInfo(@RequestParam("userid") String UserDetails) throws Exception {
 
-        //need to bring all the data from the DB
-        return new SettingInfo("moshe","levi","0545567382");
+        return usersManager.getSettingInfo(UserDetails);
     }
     @RequestMapping("/getContactsInfo")
     public List<ContactPerson> getContact(@RequestParam("userid") String UserDetails) throws Exception {
 
-        //need to bring all the data from the DB
-        List<ContactPerson> contactMap = new ArrayList<>();
-        contactMap.add(new ContactPerson("yoram","levi","0543342617"));
-        contactMap.add(new ContactPerson("pol","moshe","0543342699"));
-        return contactMap;
+        return usersManager.getUser(UserDetails).getContactPersonList();
     }
 
     @RequestMapping("/submitSetting")
@@ -36,13 +42,23 @@ public class SettingController {
 
         JSONObject obj = new JSONObject(UserDetails);
         String userId = (obj.getString("userid"));
-        settingInfo.setFname(obj.getString("FirstName"));
-        settingInfo.setLname(obj.getString("LastName"));
-        settingInfo.setPhoneNumber(obj.getString("phoneNumber"));
+        settingInfo = new SettingInfo(obj.getString("FirstName"),obj.getString("LastName"),obj.getString("phoneNumber"));
 
-        //need to save all the data from the DB and get info from the DB
+        settingInfo.setContactMap(getContactPersonFromJson(obj));
+        usersManager.updateSettingInfoById(userId,settingInfo);
+
+        DatabaseReference userRef = FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
+        userRef.setValue(usersManager.getUser(userId), (databaseError, databaseReference) -> System.out.println("done writing to firebase"));
+        Thread.sleep(5000);
+
         ResponsObj responsObj = new ResponsObj(true,"",userId);
-        responsObj.setSettingInfo(settingInfo);
         return responsObj;
+    }
+
+    private List<ContactPerson> getContactPersonFromJson(JSONObject obj) throws JSONException {
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<ContactPerson>>(){}.getType();
+        List<ContactPerson> contactList = gson.fromJson(obj.getString("contactPerson"), type);
+        return contactList;
     }
 }

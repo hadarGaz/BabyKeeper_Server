@@ -4,7 +4,6 @@ public class ResponsObj {
     private boolean actionSucceed;
     private String errorMsg;
     private String userId;
-    private SettingInfo settingInfo;
 
     public ResponsObj(boolean actionSucceed, String errorMsg, String userId) {
         this.actionSucceed = actionSucceed;
@@ -34,13 +33,5 @@ public class ResponsObj {
 
     public void setUserId(String userId) {
         this.userId = userId;
-    }
-
-    public SettingInfo getSettingInfo() {
-        return settingInfo;
-    }
-
-    public void setSettingInfo(SettingInfo settingInfo) {
-        this.settingInfo = settingInfo;
     }
 }
