@@ -1,18 +1,19 @@
 package com.babykeeper.babykeeper.model;
 
+import java.util.List;
 import java.util.Map;
 
 public class SettingInfo {
     private String Fname;
     private String Lname;
     private String phoneNumber;
-    private Map<String,String> contactMap;
+    private List<ContactPerson> contactMap;
 
-    public SettingInfo(String fname, String lname, String phoneNumber, Map<String, String> contactMap) {
+    public SettingInfo(String fname, String lname, String phoneNumber) {
         Fname = fname;
         Lname = lname;
         this.phoneNumber = phoneNumber;
-        this.contactMap = contactMap;
+        //this.contactMap = contactMap;
     }
 
     public String getFname() {
@@ -39,11 +40,11 @@ public class SettingInfo {
         this.phoneNumber = phoneNumber;
     }
 
-    public Map<String, String> getContactMap() {
+    public List<ContactPerson> getContactMap() {
         return contactMap;
     }
 
-    public void setContactMap(Map<String, String> contactMap) {
+    public void setContactMap(List<ContactPerson> contactMap) {
         this.contactMap = contactMap;
     }
 }
