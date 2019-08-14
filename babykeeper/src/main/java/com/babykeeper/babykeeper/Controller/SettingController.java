@@ -29,12 +29,19 @@ public class SettingController {
     @RequestMapping("/getUserSettingInfo")
     public SettingInfo getSettingInfo(@RequestParam("userid") String UserDetails) throws Exception {
 
-        return usersManager.getSettingInfo(UserDetails);
+        SettingInfo settingInfo = usersManager.getSettingInfo(UserDetails);
+        if(settingInfo.getPhoneNumber() == null)
+            settingInfo.setPhoneNumber("");
+        return settingInfo;
     }
     @RequestMapping("/getContactsInfo")
     public List<ContactPerson> getContact(@RequestParam("userid") String UserDetails) throws Exception {
 
-        return usersManager.getUser(UserDetails).getContactPersonList();
+      List<ContactPerson> contactPersonList =  usersManager.getUser(UserDetails).getContactPersonList();
+      if(contactPersonList == null)
+          return new ArrayList<ContactPerson>();
+      else
+        return contactPersonList;
     }
 
     @RequestMapping("/submitSetting")
