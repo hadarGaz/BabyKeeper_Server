@@ -13,7 +13,6 @@ public class SettingInfo {
         Fname = fname;
         Lname = lname;
         this.phoneNumber = phoneNumber;
-        //this.contactMap = contactMap;
     }
 
     public String getFname() {

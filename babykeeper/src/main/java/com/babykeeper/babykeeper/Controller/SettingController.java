@@ -65,7 +65,7 @@ public class SettingController {
     private List<ContactPerson> getContactPersonFromJson(JSONObject obj) throws JSONException {
         Gson gson = new Gson();
         Type type = new TypeToken<List<ContactPerson>>(){}.getType();
-        List<ContactPerson> contactList = gson.fromJson(obj.getString("contactPerson"), type);
+        List<ContactPerson> contactList = gson.fromJson(obj.getString("contactPersons"), type);
         return contactList;
     }
 }
