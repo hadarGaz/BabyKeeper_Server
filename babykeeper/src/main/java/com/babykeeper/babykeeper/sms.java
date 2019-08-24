@@ -6,12 +6,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class sms {
-    public static void main(String[] args){
+    public static void sendSMS(String number){
+
+        number = number.substring(1);
         try {
             // Construct data
             String apiKey = "apikey=" + "7C2DXDGNZ3I-BLZqQhObILNgPXy4fXPhBslXgoEriv\t";
-            String message = "&message=" + "This is your message";
-            String sender = "&sender=" + "Jims Autos";
+            String message = "&message=" + "Attention! Baby is IN the Car!!!";
+            String sender = "&sender=" + "BabyKeeper";
             String numbers = "&numbers=" + "+972545540231";
 
             // Send data
