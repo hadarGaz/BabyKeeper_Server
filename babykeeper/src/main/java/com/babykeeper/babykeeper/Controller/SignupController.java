@@ -21,6 +21,8 @@ public class SignupController {
 
     @RequestMapping("/signup")
     public ResponsObj signUp(@RequestBody String UserDetails) throws Exception {
+        System.out.println("Start signup call with param: " + UserDetails);
+
         JSONObject obj = new JSONObject(UserDetails);
         user = new User(obj.getString("Email"),obj.getString("Password"));
         user.setFname(obj.getString("FirstName"));

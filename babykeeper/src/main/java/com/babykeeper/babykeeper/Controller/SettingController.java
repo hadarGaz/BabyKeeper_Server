@@ -27,18 +27,22 @@ public class SettingController {
     UsersManager usersManager;
 
     @RequestMapping("/getUserSettingInfo")
-    public SettingInfo getSettingInfo(@RequestParam("userid") String UserDetails) throws Exception {
+    public SettingInfo getSettingInfo(@RequestParam("userid") String userid) throws Exception {
 
-        SettingInfo settingInfo = usersManager.getSettingInfo(UserDetails);
+        System.out.println("Start getUserSettingInfo call");
+        SettingInfo settingInfo = usersManager.getSettingInfo(userid);
         if(settingInfo.getPhoneNumber() == null)
             settingInfo.setPhoneNumber("");
+
+        System.out.println("The setting info it: " + settingInfo);
         return settingInfo;
     }
     @RequestMapping("/getContactsInfo")
     public List<ContactPerson> getContact(@RequestParam("userid") String UserDetails) throws Exception {
 
-      List<ContactPerson> contactPersonList =  usersManager.getUser(UserDetails).getContactPersonList();
-      if(contactPersonList == null)
+        System.out.println("Start getContactsInfo call");
+        List<ContactPerson> contactPersonList =  usersManager.getUser(UserDetails).getContactPersonList();
+        if(contactPersonList == null)
           return new ArrayList<ContactPerson>();
       else
         return contactPersonList;
@@ -46,6 +50,8 @@ public class SettingController {
 
     @RequestMapping("/submitSetting")
     public ResponsObj submitSetting(@RequestBody  String UserDetails) throws Exception {
+
+        System.out.println("Start submitSetting call with param: " + UserDetails);
 
         JSONObject obj = new JSONObject(UserDetails);
         String userId = (obj.getString("userid"));
